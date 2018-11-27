@@ -1,0 +1,21 @@
+/*
+	Create AssignedTo table with variables: ID, BugId, AssignedTo,
+ 	Time, WhoId 
+	The primary key is ID
+
+	Author:		Marius Hoegger
+	Date:		26.11.2018
+
+	stored in Code/CreateAssignedToTable.sql	
+*/;
+
+CREATE TABLE AssignedTo
+(
+  	id 						LONG INTEGER
+	, what 					TEXT
+	,	"when"					LONG INTEGER	
+	,	"who"						LONG INTEGER
+	,	"KEYID" 			INTEGER PRIMARY KEY AUTOINCREMENT
+)
+;
+		

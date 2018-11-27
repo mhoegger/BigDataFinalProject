@@ -1,5 +1,12 @@
 #!/bin/bash
-# My first script
+#
+#	Script that creates SQLite db "Bug" from the CSV files
+#
+#	Author:		Marius Hoegger
+#	Date:		27.11.2018
+#
+#	stored in ./Code/createDB.sh	
+
 
 echo " "
 echo "   _____                _         _______    _     _            "
@@ -105,5 +112,5 @@ sqlite3 ./SQL/Bugs.db <<EOS
 EOS
 
 echo "Table 'Version' created"
-echo "DONE"
+echo "Done"
 echo " "
