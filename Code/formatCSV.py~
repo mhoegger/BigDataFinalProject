@@ -1,3 +1,17 @@
+<<<<<<< HEAD
+#
+#	Python Script format bad formatted CSV files (cc.csv and short_desc.csv)
+#	These files have shiftet entries due to additional "," or linebreaks in the
+# 	content.
+#
+#	Author:		Marius Hoegger
+#	Date:		27.11.2018
+#
+#	stored in ./Code/formatCSV.py
+
+
+=======
+>>>>>>> 7bfc2b89086aa10817b927a86a0e33e038190e3b
 import os
 import sys
 import shutil
