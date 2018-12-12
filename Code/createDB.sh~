@@ -22,7 +22,7 @@ sqlite3 ./SQL/Bugs.db <<EOS
 .import ./Data/Eclipse/assigned_to.csv AssignedTo
 EOS
 
-echo "Table 'AssidnedTo' created"
+echo "Table 'AssignedTo' created"
 
 sqlite3 ./SQL/Bugs.db <<EOS
 .mode csv 

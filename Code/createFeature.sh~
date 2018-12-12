@@ -15,9 +15,9 @@ echo "  / /_  / _ \/ __ '/ __/ / / / ___/ _ \/ /   / ___/ _ \/ __ '/ __/ / __ \/
 echo " / __/ /  __/ /_/ / /_/ /_/ / /  /  __/ /___/ /  /  __/ /_/ / /_/ / /_/ / / / / "
 echo "/_/    \___/\__,_/\__/\__,_/_/   \___/\____/_/   \___/\__,_/\__/_/\____/_/ /_/  "
 echo " "                                                                                                                                                          
-
+ls
 while true; do
-    read -p "Do you wish to install all required R packages (recommended)? (y/n)? " yn
+    read -p "Do you wish to install all required R packages? (y/n)? " yn
     case $yn in
         [Yy]* ) 
 		echo "install packages..."
@@ -39,7 +39,7 @@ echo "Create Features..."
 Rscript ./createFeature.R
 echo "Features created"
 echo "Create Master Tabel..."
-Rscript ./createFeature.R
+Rscript ./createMasterFeatureTable.R
 echo "Master Tabel created"
 echo "Done"
 echo " "

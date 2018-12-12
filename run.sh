@@ -10,4 +10,6 @@
 
 . ./Code/prepCSV.sh
 . ./Code/createDB.sh
-. ./Code/createFeature.sh
+cd ./Code
+. ./createFeature.sh
+cd ..
