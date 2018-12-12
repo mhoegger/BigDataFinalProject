@@ -6,7 +6,7 @@
 #	Author:		Marius Hoegger
 #	Date:		27.11.2018
 #
-#	stored in ./Code/prepCSV.sh	
+#	stored in ./prepCSV.sh	
 
 echo ""
 echo " ██████╗███████╗██╗   ██╗    ██████╗ ██████╗ ███████╗██████╗  "

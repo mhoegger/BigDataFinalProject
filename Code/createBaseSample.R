@@ -50,8 +50,9 @@ IDsBaseSample = dbGetQuery( db,
                             WHERE (SeveritySample.what != "enhancement")
                             )
                             ;')
-
+print("BaseSample created")
 dbWriteTable(db, "BaseSample", IDsBaseSample, overwrite=TRUE)
+print("BaseSample stored in Bugs.db")
 
 #Disconnect
 dbDisconnect(db)

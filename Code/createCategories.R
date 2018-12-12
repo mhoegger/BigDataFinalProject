@@ -80,7 +80,10 @@ OSCat$DetailedOS <- ifelse(OSCat$what %in% c("Windows 2003 Server","Windows 95",
                         ))
                     )
 OSCat=OSCat[-1]
+print("Categories for OS created")
 dbWriteTable(db, "OSCat", OSCat, overwrite=TRUE)
+print("OS categories stored in Bugs.db")
+
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++COMPONENTS++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -124,7 +127,9 @@ ComponentCat$BigComponent <- ifelse(grepl("Update",ComponentCat$what),'Update',
                                     )
 )
 ComponentCat=ComponentCat[-1]
+print("Categories for Components created")
 dbWriteTable(db, "ComponentCat", ComponentCat, overwrite=TRUE)
+print("Component categories stored in Bugs.db")
 
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -180,7 +185,11 @@ VersionCat$Segment <- factor(VersionCat$Segment,
                              labels = c("Major", "Minor", "Service"))
 
 VersionCat=VersionCat[-c(3,4,6,9,10)]
+
+print("Categories for Version created")
 dbWriteTable(db, "VersionCat", VersionCat, overwrite=TRUE)
+print("Version categories stored in Bugs.db")
+
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++PRIORITY++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -207,7 +216,10 @@ PriorityCat$compressedPriority <- ifelse(PriorityCat$what %in% c("P1","P2"),'hig
                                   )
 
 PriorityCat=PriorityCat[-1]
+
+print("Categories for Priority created")
 dbWriteTable(db, "PriorityCat", PriorityCat, overwrite=TRUE)
+print("Priority categories stored in Bugs.db")
 
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -238,7 +250,9 @@ SeverityCat$compressedSeverity <- ifelse(SeverityCat$what %in% c("blocker","crit
 )
 
 SeverityCat=SeverityCat[-1]
+print("Categories for Severity created")
 dbWriteTable(db, "SeverityCat", SeverityCat, overwrite=TRUE)
+print("Severity categories stored in Bugs.db")
 
 #Disconnect
 dbDisconnect(featuredb)

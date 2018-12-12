@@ -42,6 +42,7 @@ target <- dbGetQuery(db,
                      ')
 
 dbWriteTable(featuredb, "Target", target, overwrite=TRUE)
+print("Target created and stored in features.db")
 
 #-----------------------------------------------------------------------------------
 #-----REPORTS-----------------------------------------------------------------------
@@ -65,6 +66,7 @@ reports <- dbGetQuery(db,
                      ')
 
 dbWriteTable(featuredb, "Reports", reports, overwrite=TRUE)
+print("Feature 'Reports' created and stored in features.db")
 
 #-----------------------------------------------------------------------------------
 #-----Number-Of-Assignments---------------------------------------------------------
@@ -115,6 +117,8 @@ reopened = dbGetQuery(db,
                       ')
 
 dbWriteTable(featuredb, "IsReopened", reopened, overwrite=TRUE)
+print("Feature 'IsReopened' created and stored in features.db")
+
 
 #-----------------------------------------------------------------------------------
 #-----DESCRIPTION-LENGTH------------------------------------------------------------
@@ -132,6 +136,7 @@ DescriptionLength = dbGetQuery(db,
                                ')
 
 dbWriteTable(featuredb, "DescriptionLength", DescriptionLength, overwrite=TRUE)
+print("Feature 'DescriptionLength' created and stored in features.db")
 
 
 #-----------------------------------------------------------------------------------
@@ -148,6 +153,7 @@ NumberOfCC = dbGetQuery(db,
                         ')
 
 dbWriteTable(featuredb, "NumCC", NumberOfCC, overwrite=TRUE)
+print("Feature 'NumCC' created and stored in features.db")
 
 
 #-----------------------------------------------------------------------------------
@@ -178,6 +184,7 @@ IsAssigned = dbGetQuery( db,
 
 
 dbWriteTable(featuredb, "IsAssigned", IsAssigned, overwrite=TRUE)
+print("Feature 'IsAssigned' created and stored in features.db")
 
 
 #-----------------------------------------------------------------------------------
@@ -201,6 +208,7 @@ NChangesAssignment = dbGetQuery( db,'
                                  GROUP BY HS.id;')
 
 dbWriteTable(featuredb, "NumReassignments", NChangesAssignment, overwrite=TRUE)
+print("Feature 'NumReassignments' created and stored in features.db")
 
 
 #-----------------------------------------------------------------------------------
@@ -245,6 +253,7 @@ NPeopleInvolved = dbGetQuery( db,'SELECT S2.id, S2.numPeopleInvolved
                               ')
 
 dbWriteTable(featuredb, "NumPeopleInvolved", NPeopleInvolved, overwrite=TRUE)
+print("Feature 'NumPeopleInvolved' created and stored in features.db")
 
 
 #-----------------------------------------------------------------------------------
@@ -361,6 +370,7 @@ TeamWork = dbGetQuery( db,'
                        ;')
 
 dbWriteTable(featuredb, "TeamWork", TeamWork, overwrite=TRUE)
+print("Feature 'TeamWork' created and stored in features.db")
 
 
 #-----------------------------------------------------------------------------------
@@ -413,6 +423,7 @@ ModWithinFirstDay = dbGetQuery( db,'SELECT Set2.id,
                                 ;')
 
 dbWriteTable(featuredb, "IsModWithinFirstDay", ModWithinFirstDay, overwrite=TRUE)
+print("Feature 'IsModWithinFirstDay' created and stored in features.db")
 
 
 #-----------------------------------------------------------------------------------
@@ -462,6 +473,7 @@ UpdateToAttributes = dbGetQuery( db,'
 
 
 dbWriteTable(featuredb, "HasUpdateToAttributes", UpdateToAttributes, overwrite=TRUE)
+print("Feature 'HasUpdateToAttributes' created and stored in features.db")
 
 
 #-----------------------------------------------------------------------------------
@@ -487,6 +499,7 @@ X5[,2] = X5[,2]-1
 head(X5)
 
 dbWriteTable(featuredb, "NumStatusUpdates", X5 ,overwrite=TRUE)
+print("Feature 'NumStatusUpdates' created and stored in features.db")
 
 
 #-----------------------------------------------------------------------------------
@@ -551,6 +564,8 @@ version <- dbGetQuery(db,'
                       ')
 
 dbWriteTable(featuredb, "Version", version, overwrite=TRUE)
+print("Feature 'Version' created and stored in features.db")
+
 
 #-----------------------------------------------------------------------------------
 #-----Component---------------------------------------------------------------------
@@ -589,6 +604,8 @@ component <- dbGetQuery(db,'
                         ')
 
 dbWriteTable(featuredb, "Component", component, overwrite=TRUE)
+print("Feature 'Component' created and stored in features.db")
+
 
 #-----------------------------------------------------------------------------------
 #-----OS---------------------------------------------------------
@@ -628,6 +645,7 @@ os <- dbGetQuery(db,'
                  ')
 
 dbWriteTable(featuredb, "OS", os, overwrite=TRUE)
+print("Feature 'OS' created and stored in features.db")
 
 
 #-----------------------------------------------------------------------------------
@@ -670,6 +688,8 @@ Priority <- dbGetQuery(db,
                        
 
 dbWriteTable(featuredb, "Priority", Priority, overwrite=TRUE)
+print("Feature 'Priority' created and stored in features.db")
+
 
 #-----------------------------------------------------------------------------------
 #-----Product---------------------------------------------------------
@@ -703,6 +723,8 @@ Product <- dbGetQuery(db,
                  ')
                        
 dbWriteTable(featuredb, "Product", Product, overwrite=TRUE)
+print("Feature 'Product' created and stored in features.db")
+
 
 #-----------------------------------------------------------------------------------
 #-----Severity----------------------------------------------------------------------
@@ -741,6 +763,8 @@ Severity <- dbGetQuery(db,'
                     ')                       
 
 dbWriteTable(featuredb, "Severity", Severity, overwrite=TRUE)
+print("Feature 'Severity' created and stored in features.db")
+
 
 #-----------------------------------------------------------------------------------
 #-----IS-OPEN-FOR-ONE-WEEK-OR-MORE--------------------------------------------------
@@ -804,6 +828,7 @@ OpenForOneWeekOrMore = dbGetQuery( db,'
                                    ;')
 
 dbWriteTable(featuredb, "IsOpenForOneWeekOrMore", OpenForOneWeekOrMore, overwrite=TRUE)
+print("Feature 'IsOpenForOneWeekOrMore' created and stored in features.db")
 
 
 #-----------------------------------------------------------------------------------
@@ -827,6 +852,7 @@ YearAndMonth = dbGetQuery( db,'
                            ;')
 
 dbWriteTable(featuredb, "YearAndMonth", YearAndMonth, overwrite=TRUE)
+print("Feature 'YearAndMonth' created and stored in features.db")
 
 
 #-----------------------------------------------------------------------------------
@@ -954,6 +980,7 @@ dbWriteTable(featuredb, "YearAndMonth", YearAndMonth, overwrite=TRUE)
 # AgeSoftware=AgeSoftware[-c(1,2,4,5)]
 # 
 # dbWriteTable(featuredb, "AgeSoftware", AgeSoftware, overwrite=TRUE)
+# print("Feature 'AgeSoftware' created and stored in features.db")
 
 
 # rm(VersionProduct)
@@ -989,6 +1016,7 @@ AssignedToWhom = dbGetQuery( db,
                              GROUP BY BaseSample.id;')
 
 dbWriteTable(featuredb, "AssignedToWhom", AssignedToWhom, overwrite=TRUE)
+print("Feature 'AssignedToWhom' created and stored in features.db")
 
 
 #-----------------------------------------------------------------------------------
@@ -1034,6 +1062,8 @@ UpdatePriority = dbGetQuery( db,'
                               ON S1.id = BaseSample.id;')
 
 dbWriteTable(featuredb, "UpdatePriority", UpdatePriority, overwrite=TRUE)
+print("Feature 'UpdatePriority' created and stored in features.db")
+
 
 #-----------------------------------------------------------------------------------
 #-----UPDATE-SEVERITY---------------------------------------------------------------
@@ -1079,6 +1109,7 @@ UpdateSeverity = dbGetQuery( db,'
                              ;')
 
 dbWriteTable(featuredb, "UpdateSeverity", UpdateSeverity, overwrite=TRUE)
+print("Feature 'UpdateSeverity' created and stored in features.db")
 
 
 #-----------------------------------------------------------------------------------
@@ -1124,6 +1155,7 @@ SuccessRateAssigner1$rateFirstAssigner = ((SuccessRateAssigner1$FixedCumSum)/(Su
 SuccessRateAssigner1 = SuccessRateAssigner1[,-c(3,4,5,6,7)]
 
 dbWriteTable(featuredb, "SuccessRateFirstAssigner", SuccessRateAssigner1, overwrite=TRUE)
+print("Feature 'SuccessRateFirstAssigner' created and stored in features.db")
 
 
 #-----------------------------------------------------------------------------------
@@ -1172,6 +1204,7 @@ SuccessRateAssigner2$rateLastAssigner = ((SuccessRateAssigner2$FixedCumSum)/(Suc
 SuccessRateAssigner2 = SuccessRateAssigner2[,-c(3,4,5,6,7)]
 
 dbWriteTable(featuredb, "SuccessRateLastAssigner", SuccessRateAssigner2, overwrite=TRUE)
+print("Feature 'SuccessRateLastAssigner' created and stored in features.db")
 
 
 #-----------------------------------------------------------------------------------
@@ -1217,6 +1250,7 @@ SuccessRateAssignee1$rateFirstAssignee = ((SuccessRateAssignee1$FixedCumSum)/(Su
 SuccessRateAssignee1 = SuccessRateAssignee1[,-c(3,4,5,6,7)]
 
 dbWriteTable(featuredb, "SuccessRateFirstAssignee", SuccessRateAssignee1, overwrite=TRUE)
+print("Feature 'SuccessRateFirstAssignee' created and stored in features.db")
 
 
 #-----------------------------------------------------------------------------------
@@ -1265,6 +1299,7 @@ SuccessRateAssignee2$rateLastAssignee = ((SuccessRateAssignee2$FixedCumSum)/(Suc
 SuccessRateAssignee2 = SuccessRateAssignee2[,-c(3,4,5,6,7)]
 
 dbWriteTable(featuredb, "SuccessRateLastAssignee", SuccessRateAssignee2, overwrite=TRUE)
+print("Feature 'SuccessRateLastAssignee' created and stored in features.db")
 
 
 #-----------------------------------------------------------------------------------
@@ -1310,6 +1345,7 @@ SuccessRateReporter$rateReporter = ((SuccessRateReporter$FixedCumSum)/(SuccessRa
 SuccessRateReporter = SuccessRateReporter[,-c(3,4,5,6,7)]
 
 dbWriteTable(featuredb, "SuccessRateReporter", SuccessRateReporter, overwrite=TRUE)
+print("Feature 'SuccessRateReporter' created and stored in features.db")
 
 #Disconnect
 dbDisconnect(featuredb)

@@ -60,6 +60,7 @@ master <- dbGetQuery(featuredb,
                      ;')
 
 dbWriteTable(featuredb, "MasterTable", master, overwrite=TRUE)
+print("MasterTable created and stored in features.db")
 
 #Disconnect
 dbDisconnect(featuredb)

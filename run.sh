@@ -7,9 +7,8 @@
 #
 #	stored in ./run.sh
 
-
-. ./Code/prepCSV.sh
-. ./Code/createDB.sh
 cd ./Code
+. ./prepCSV.sh
+. ./createDB.sh
 . ./createFeature.sh
 cd ..
