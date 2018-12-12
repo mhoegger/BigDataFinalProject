@@ -10,6 +10,7 @@
 
 setwd("./")
 library("RSQLite")
+library("dplyr")
 
 #connect with Bug Database
 sqlite.driver <- dbDriver("SQLite")
@@ -496,7 +497,6 @@ X5 = dbGetQuery(db,
 )')
 
 X5[,2] = X5[,2]-1
-head(X5)
 
 dbWriteTable(featuredb, "NumStatusUpdates", X5 ,overwrite=TRUE)
 print("Feature 'NumStatusUpdates' created and stored in features.db")
@@ -869,122 +869,85 @@ print("Feature 'YearAndMonth' created and stored in features.db")
 #   - ageSoftwareversionInDays: days since the product version was relesed (10th appereance)
 
 
-# FirstAppearanceSoftware = dbGetQuery(db,'
-#                                      SELECT
-#                                      Set1.Product,
-#                                      Set1.Version,
-#                                      MAX(Set1.time) AS firstAppearance
-#                                      FROM
-#                                      (
-#                                      SELECT
-#                                      Version.id,
-#                                      Product,
-#                                      Version,
-#                                      time
-#                                      FROM 
-#                                      (
-#                                      SELECT
-#                                      id,
-#                                      [when] AS time,
-#                                      Version
-#                                      FROM 
-#                                      (
-#                                      SELECT 
-#                                      id, 
-#                                      [when], 
-#                                      REPLACE(What,"0 D","D") as Version /* Clean some of the Version values "0 DD.." "DD.. are actually the same*/
-#                                      FROM Version
-#                                      )
-#                                      GROUP BY id 
-#                                      HAVING MAX([when])=[when]
-#                                      ) Version
-#                                      INNER JOIN 
-#                                      (
-#                                      SELECT
-#                                      id,
-#                                      what as Product
-#                                      FROM Product
-#                                      GROUP BY id 
-#                                      HAVING MAX([when])=[when]
-#                                      ) Product
-#                                      ON Product.id = Version.id
-#                                      ) Set1
-#                                      WHERE 
-#                                      (
-#                                      SELECT 
-#                                      COUNT(*)
-#                                      FROM
-#                                      (
-#                                      SELECT
-#                                      Version.id,
-#                                      Product,
-#                                      Version,
-#                                      time
-#                                      FROM 
-#                                      (
-#                                      SELECT
-#                                      id,
-#                                      [when] AS time,
-#                                      Version
-#                                      FROM 
-#                                      (
-#                                      SELECT 
-#                                      id, 
-#                                      [when], 
-#                                      REPLACE(what,"0 D","D") as Version 
-#                                      FROM Version
-#                                      )
-#                                      GROUP BY id 
-#                                      HAVING MAX([when])=[when]
-#                                      ) Version
-#                                      INNER JOIN 
-#                                      (
-#                                      SELECT
-#                                      id,
-#                                      what as Product
-#                                      FROM Product
-#                                      GROUP BY id 
-#                                      HAVING MAX([when])=[when]
-#                                      ) Product
-#                                      ON Product.id = Version.id
-#                                      ) Set2
-#                                      WHERE 
-#                                      (
-#                                      Set1.Product = Set2.Product 
-#                                      AND 
-#                                      Set1.Version = Set2.Version 
-#                                      AND 
-#                                      Set2.time <= Set1.time) 
-#                                      ) <=10
-#                                      GROUP BY Set1.Product, Set1.Version;')
-# 
-# 
-# 
-# VersionProduct = dbGetQuery( db,'
-#                              SELECT Set1.id, Set1.opening, Version, Product.what AS Product
-#                              FROM(SELECT BaseSample.id, BaseSample.opening, REPLACE(Version.what,"0 D","D") AS Version
-#                              FROM BaseSample
-#                              INNER JOIN Version
-#                              ON BaseSample.id = Version.id
-#                              GROUP BY BaseSample.id
-#                              Having MAX(Version.[when])=[when]) Set1
-#                              INNER JOIN Product
-#                              ON Set1.id = Product.id
-#                              GROUP BY Set1.id
-#                              HAVING MAX(Product.[when])=[when];')
-# 
-# 
-# AgeSoftware = merge(VersionProduct,FirstAppearanceSoftware)
-# AgeSoftware$ageSoftwareVersionInDays = round((as.numeric(AgeSoftware$opening)-as.numeric(AgeSoftware$firstAppearance))/86400,digits = 0)
-# AgeSoftware[,6][AgeSoftware[, 6] < 0] <- 0
-# AgeSoftware=AgeSoftware[-c(1,2,4,5)]
-# 
-# dbWriteTable(featuredb, "AgeSoftware", AgeSoftware, overwrite=TRUE)
-# print("Feature 'AgeSoftware' created and stored in features.db")
+FirstAppearanceSoftware = dbGetQuery(db,'
+SELECT
+                                     Set1.Product,
+                                     Set1.Version,
+                                     Set1.time
+                                     FROM
+                                     (
+                                     SELECT
+                                     Version.id,
+                                     Product,
+                                     Version,
+                                     time
+                                     FROM 
+                                     (
+                                     SELECT
+                                     id,
+                                     [when] AS time,
+                                     Version
+                                     FROM 
+                                     (
+                                     SELECT 
+                                     id, 
+                                     [when], 
+                                     REPLACE(What,"0 D","D") as Version /* Clean some of the Version values "0 DD.." "DD.. are actually the same*/
+                                     FROM Version
+                                     )
+                                     GROUP BY id 
+                                     HAVING MAX([when])=[when]
+                                     ) Version
+                                     INNER JOIN 
+                                     (
+                                     SELECT
+                                     id,
+                                     what as Product
+                                     FROM Product
+                                     GROUP BY id 
+                                     HAVING MAX([when])=[when]
+                                     ) Product
+                                     ON Product.id = Version.id
+                                     ) Set1;')
+
+# create count variable
+FirstAppearanceSoftware$N = 1
+# order data.frame: Product,Version, time
+FirstAppearanceSoftware$time = as.numeric(FirstAppearanceSoftware$time)
+FirstAppearanceSoftware=FirstAppearanceSoftware[order(FirstAppearanceSoftware$Product,FirstAppearanceSoftware$Version,FirstAppearanceSoftware$time),]
+# calculate cummulative sum by product version
+FirstAppearanceSoftware$cumsum <- do.call(c, tapply(FirstAppearanceSoftware$N, paste0(FirstAppearanceSoftware$Product, FirstAppearanceSoftware$Version), FUN=cumsum))
+# keep only if the cumsum is smaller than 8
+FirstAppearanceSoftware = FirstAppearanceSoftware[FirstAppearanceSoftware$cumsum<8,]
+# keep max time of each product, version pair => birthday 
+FirstAppearanceSoftware = FirstAppearanceSoftware %>% group_by(Product,Version) %>% top_n(1, time)
+# drop unwanted columns
+FirstAppearanceSoftware = FirstAppearanceSoftware[,c(1,2,3)]
 
 
-# rm(VersionProduct)
-# rm(FirstAppearanceSoftware)
+
+VersionProduct = dbGetQuery( db,'
+                             SELECT Set1.id, Set1.opening, Version, Product.what AS Product
+                             FROM(SELECT Reports.id, Reports.opening, REPLACE(Version.what,"0 D","D") AS Version
+                             FROM Reports
+                             INNER JOIN Version
+                             ON Reports.id = Version.id 
+                             GROUP BY Reports.id
+                             Having MAX(Version.[when])=[when]) Set1
+                             INNER JOIN Product
+                             ON Set1.id = Product.id
+                             GROUP BY Set1.id
+                             HAVING MAX(Product.[when])=[when];')
+
+
+AgeSoftware = merge(VersionProduct,FirstAppearanceSoftware)
+AgeSoftware$ageSoftwareVersionInDays = round((as.numeric(AgeSoftware$opening)-AgeSoftware$time)/86400,digits = 0)
+AgeSoftware[,6][AgeSoftware[, 6] < 0] <- 0
+AgeSoftware=AgeSoftware[-c(1,2,4,5)]
+
+dbWriteTable(featuredb, "AgeSoftware", AgeSoftware, overwrite=TRUE)
+print("Feature 'AgeSoftware' created and stored in features.db")
+
 
 #-----------------------------------------------------------------------------------
 #-----ASSIGNED-TO-WHOM----------------------------------------------------------------
@@ -1141,7 +1104,7 @@ SuccessRateAssigner1 <- SuccessRateAssigner_tem
 # create variable needed for the calculation of the cummulative sum
 SuccessRateAssigner1$N = 1
 # order data.frame: firstAssigner, when
-SuccessRateAssigner1[order(SuccessRateAssigner1$firstAssigner,SuccessRateAssigner1$when),]
+SuccessRateAssigner1 <- SuccessRateAssigner1[order(SuccessRateAssigner1$firstAssigner,SuccessRateAssigner1$when),]
 # calculate cummulative sum of the number of times a assigner appears
 SuccessRateAssigner1$AssignerCumSum <- ave(SuccessRateAssigner1$N, SuccessRateAssigner1$firstAssigner, FUN=cumsum)
 # calculate cummulative sum of the number of bugs fixed by assigner
@@ -1190,7 +1153,7 @@ SuccessRateAssigner2 <- SuccessRateAssigner_tem2
 # create variable needed for the calculation of the cummulative sum
 SuccessRateAssigner2$N = 1
 # order data.frame: lastAssigner, when
-SuccessRateAssigner2[order(SuccessRateAssigner2$lastAssigner,SuccessRateAssigner2$when),]
+SuccessRateAssigner2 <- SuccessRateAssigner2[order(SuccessRateAssigner2$lastAssigner,SuccessRateAssigner2$when),]
 # calculate cummulative sum of the number of times a assigner appears
 SuccessRateAssigner2$AssignerCumSum <- ave(SuccessRateAssigner2$N, SuccessRateAssigner2$lastAssigner, FUN=cumsum)
 # calculate cummulative sum of the number of bugs fixed by assigner
@@ -1236,7 +1199,7 @@ SuccessRateAssignee1 <- SuccessRateAssignee_tem
 # create variable needed for the calculation of the cummulative sum
 SuccessRateAssignee1$N = 1
 # order data.frame: firstAssignee, when
-SuccessRateAssignee1[order(SuccessRateAssignee1$firstAssignee,SuccessRateAssignee1$when),]
+SuccessRateAssignee1 <- SuccessRateAssignee1[order(SuccessRateAssignee1$firstAssignee,SuccessRateAssignee1$when),]
 # calculate cummulative sum of the number of times a assigner appears
 SuccessRateAssignee1$AssignerCumSum <- ave(SuccessRateAssignee1$N, SuccessRateAssignee1$firstAssignee, FUN=cumsum)
 # calculate cummulative sum of the number of bugs fixed by assigner
@@ -1285,7 +1248,7 @@ SuccessRateAssignee2 <- SuccessRateAssignee_tem2
 # create variable needed for the calculation of the cummulative sum
 SuccessRateAssignee2$N = 1
 # order data.frame: lastAssignee, when
-SuccessRateAssignee2[order(SuccessRateAssignee2$lastAssignee,SuccessRateAssignee2$when),]
+SuccessRateAssignee2 <- SuccessRateAssignee2[order(SuccessRateAssignee2$lastAssignee,SuccessRateAssignee2$when),]
 # calculate cummulative sum of the number of times a assigner appears
 SuccessRateAssignee2$AssignerCumSum <- ave(SuccessRateAssignee2$N, SuccessRateAssignee2$lastAssignee, FUN=cumsum)
 # calculate cummulative sum of the number of bugs fixed by assigner
@@ -1331,7 +1294,7 @@ SuccessRateReporter <- SuccessRateReporter_tem
 # create variable needed for the calculation of the cummulative sum
 SuccessRateReporter$N = 1
 # order data.frame: Reporter, when
-SuccessRateReporter[order(SuccessRateReporter$reporter,SuccessRateReporter$when),]
+SuccessRateReporter <- SuccessRateReporter[order(SuccessRateReporter$reporter,SuccessRateReporter$when),]
 # calculate cummulative sum of the number of times a reporter appears
 SuccessRateReporter$ReporterCumSum <- ave(SuccessRateReporter$N, SuccessRateReporter$reporter, FUN=cumsum)
 # calculate cummulative sum of the number of bugs fixed by reporter

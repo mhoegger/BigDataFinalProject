@@ -8,6 +8,9 @@ library("RSQLite")
 library("randomForest")
 library("dplyr")
 library("ggplot2")
+print("ssss")
+print(getwd())
+
 # connect to the sqlite file
 sqlite.driver <- dbDriver("SQLite")
 db = dbConnect(drv=sqlite.driver, dbname="./../SQL/Bugs.db")
@@ -21,7 +24,7 @@ alltables
 
 
 set <- dbGetQuery(dbfeature,
-                  ' 
+                  '
                   SELECT *
                   FROM MasterTable
 ;
@@ -53,7 +56,7 @@ for (i in 1:tries){
   #form<-(paste0("target~",paste0("", sample, collapse="+"),""))
   form<-(paste0("as.factor(target)~",paste0("", sample, collapse="+"),""))
   formula<-as.formula(form)
-  
+
   print(formula)
   NB_model <- naiveBayes(formula,data=train,laplace = 0)
   trainPred <- predict(NB_model, test[,-which(names(test) %in% c("target"))])
@@ -64,40 +67,50 @@ for (i in 1:tries){
   print(auc@y.values)
   df = rbind(df, data.frame(as.numeric(auc@y.values),form))
 }
-# for (j in 1:length(featurelist)){
-#   print(j)
-#   res<-combn(featurelist,j)
-#   comblist <- list()
-#   for (i in 1:(length(res)/j)){
-#     print(i)
-#     #comblist[[i]]<-(paste0("as.factor(target)~",paste0("as.factor(", res[,i],")", collapse="+"),""))
-#     comblist[[i]]<-(paste0("as.factor(Target)~",paste0("", res[,i], collapse="+"),""))
-#     #comblist[[i]]<-(paste0("target~",paste0("as.factor(", res[,i],")", collapse="+"),""))
-#     
-#   }
-#   for (i in 1:length(comblist)) {
-#     print(comblist[[i]])
-#     form<-as.formula(comblist[[i]])
-#     NB_model <- naiveBayes(form,data=train)
-#     #SVM_model <- svm(as.factor(target)~SuccessRateAssignee,data=train)
-#     #SVM_model <- svm(form,data=train)
-#     trainPred <- predict(NB_model, test[,-which(names(test) %in% c("Target"))])
-#     trainPred
-#     prediction <- prediction(as.numeric(trainPred),test$Target)
-#     ROC<-performance(prediction,"tpr","fpr")
-#     auc<-performance(prediction,measure = "auc")
-#     print(auc@y.values)
-#     df = rbind(df, data.frame(as.numeric(auc@y.values),comblist[[i]]))
-#     #n<-nrow(na.omit(df))
-#     #df$auc[n+1] <- as.numeric(auc@y.values)
-#     #df$mod[n+1] <- comblist[[i]]
-#     
-#   }
-# }
-print("**************************")
-df
-head(df[order(-df$as.numeric.auc.y.values.),])
-#png(filename = "rocr.png",width=700, height = 700)
-#plot(x,col=6)
-#dev.off()
 
+
+NB_model <- naiveBayes(as.factor(target)~numStatusUpdates+rateLastAssignee+rateFirstAssignee+rateLastAssigner+rateFirstAssigner+rateReporter+Length+ageSoftwareVersionInDays+teamWorkRate+numCC,data=train)
+trainPred <- predict(NB_model, test[,-which(names(test) %in% c("target"))])
+trainPred
+prediction <- prediction(as.numeric(trainPred),test$target)
+ROC<-performance(prediction,"tpr","fpr")
+auc<-performance(prediction,measure = "auc")
+# print(auc@y.values)
+# df = rbind(df, data.frame(as.numeric(auc@y.values),form))
+# # for (j in 1:length(featurelist)){
+# #   print(j)
+# #   res<-combn(featurelist,j)
+# #   comblist <- list()
+# #   for (i in 1:(length(res)/j)){
+# #     print(i)
+# #     #comblist[[i]]<-(paste0("as.factor(target)~",paste0("as.factor(", res[,i],")", collapse="+"),""))
+# #     comblist[[i]]<-(paste0("as.factor(Target)~",paste0("", res[,i], collapse="+"),""))
+# #     #comblist[[i]]<-(paste0("target~",paste0("as.factor(", res[,i],")", collapse="+"),""))
+# #     
+# #   }
+# #   for (i in 1:length(comblist)) {
+# #     print(comblist[[i]])
+# #     form<-as.formula(comblist[[i]])
+# #     NB_model <- naiveBayes(form,data=train)
+# #     #SVM_model <- svm(as.factor(target)~SuccessRateAssignee,data=train)
+# #     #SVM_model <- svm(form,data=train)
+# #     trainPred <- predict(NB_model, test[,-which(names(test) %in% c("Target"))])
+# #     trainPred
+# #     prediction <- prediction(as.numeric(trainPred),test$Target)
+# #     ROC<-performance(prediction,"tpr","fpr")
+# #     auc<-performance(prediction,measure = "auc")
+# #     print(auc@y.values)
+# #     df = rbind(df, data.frame(as.numeric(auc@y.values),comblist[[i]]))
+# #     #n<-nrow(na.omit(df))
+# #     #df$auc[n+1] <- as.numeric(auc@y.values)
+# #     #df$mod[n+1] <- comblist[[i]]
+# #     
+# #   }
+# # }
+# print("**************************")
+# df
+# head(df[order(-df$as.numeric.auc.y.values.),])
+# #png(filename = "rocr.png",width=700, height = 700)
+# #plot(x,col=6)
+# #dev.off()
+# 

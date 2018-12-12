@@ -7,4 +7,4 @@
 #	stored in ./Code/installPackages.R
 
 setwd("./")
-install.packages(c("RSQLite","stringr","e1071","dplyr","plyr"))
+install.packages(c("RSQLite","stringr","e1071","dplyr","plyr","DBI", "caret", "ROCR"))

@@ -12,3 +12,18 @@ cd ./Code
 . ./createDB.sh
 . ./createFeature.sh
 cd ..
+
+
+while true; do
+    read -p "Do you wish to continue with the prediction? (y/n)? " yn
+    case $yn in
+        [Yy]* ) 
+		echo "Procede with prediction"
+		. ./runPrediction.sh
+		break;;
+        [Nn]* ) exit;;
+        * ) echo "Please answer yes or no.";;
+    esac
+done
+
+echo "Done"
