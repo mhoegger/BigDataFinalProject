@@ -11,8 +11,8 @@ run the process and where the results are saved.
 
 ### Prerequisites
 
-Make sure that in the dame directory this README is located also contains directories called
-SQL, Data and Code. Additionaly check if the content of these directory matches with the content listed below.
+Make sure that in the dame directory this README is located also contains directories 
+`.\SQL`, `.\Data` and `.\Code`. Additionaly check if the content of these directory matches with the content listed below.
 You can place the Zip files named Eclipse.zip into the Data directory. Note: We already provide this zip file.
 
 
@@ -23,9 +23,9 @@ To start the process open the terminal in this directory and run the following c
 . .\run.sh
 ```
 
-This will extract the data for you into *./Data/Eclipse* directory and it will also prepare the data.
-For this some of the csv files are beeing changed. The original files are moved to *./Data/Eclipse/original*.
-Nextup the the data is read into a databade named *Bugs.db* which is stored in *./Code*
+This will extract the data for you into `./Data/Eclipse` directory and it will also prepare the data.
+For this some of the csv files are beeing changed. The original files are moved to `./Data/Eclipse/original`.
+Nextup the the data is read into a databade named `Bugs.db` which is stored in `./Code`
 
 next the features will be created, but before that you will be asked wheher you want to intall the required R packages.
 
@@ -33,25 +33,44 @@ next the features will be created, but before that you will be asked wheher you 
 Do you wish to install all required R packages? (y/n)? 
 ```
 
-If you want to install them type "y" and press ENTER. If you want to skip installing them type "n" and press ENTER.
+If you want to install them type `y` and press `ENTER`. If you want to skip installing them type `n` and press `ENTER`.
 
 Next up the features which are used for the prediction are being created. 
-The results are saved in the *features.db* database located in *./SQL*.
+The results are saved in the `features.db` database located in `./SQL`.
 
 
 ## Running the tests
 
 Explain how to run the automated tests for this system
+.....
 
+## Content
 
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
+```bash
+├── Code
+│   ├── createBaseSample.R
+│   ├── createCategories.R
+│   ├── createDB.sh
+│   ├── createFeature.R
+│   ├── createFeature.sh
+│   ├── createMasterFeatureTable.R
+│   ├── formatCSV.py
+│   ├── installPackages.R
+│   ├── prediction.R
+│   ├── prepCSV.sh
+├── createDB.sh~
+├── Data
+├── Eclipse.zip
+├── README.md
+├── run.sh
+└── SQL
+```
 
 ## python libraries used
 
-* ...
+* os
+* sys
+* shutil
 
 ## R packages used
 
